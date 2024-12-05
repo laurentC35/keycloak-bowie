@@ -6,7 +6,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { getKcClsx, type KcClsx } from "keycloakify/login/lib/kcClsx";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
-import { Button, Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
@@ -35,7 +35,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                 <div id="kc-registration-container">
                     <div id="kc-registration">
                         <Typography>
-                            {msg("noAccount")}{" "}
+                            {msg("noAccount")}
                             <a tabIndex={8} href={url.registrationUrl}>
                                 {msg("doRegister")}
                             </a>
@@ -89,34 +89,33 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                         >
                             {!usernameHidden && (
                                 <div className={kcClsx("kcFormGroupClass")}>
-                                    <label htmlFor="username" className={kcClsx("kcLabelClass")}>
-                                        {!realm.loginWithEmailAllowed
-                                            ? msg("username")
-                                            : !realm.registrationEmailAsUsername
-                                              ? msg("usernameOrEmail")
-                                              : msg("email")}
-                                    </label>
-                                    <input
+                                    <TextField
+                                        sx={{ width: "100%", minWidth: 300, pb: 2 }}
+                                        label={
+                                            !realm.loginWithEmailAllowed
+                                                ? msg("username")
+                                                : !realm.registrationEmailAsUsername
+                                                  ? msg("usernameOrEmail")
+                                                  : msg("email")
+                                        }
                                         tabIndex={2}
-                                        id="username"
-                                        className={kcClsx("kcInputClass")}
+                                        variant="outlined"
                                         name="username"
                                         defaultValue={login.username ?? ""}
-                                        type="text"
                                         autoFocus
                                         autoComplete="username"
-                                        aria-invalid={messagesPerField.existsError("username", "password")}
+                                        error={messagesPerField.existsError("username", "password")}
+                                        helperText={
+                                            messagesPerField.existsError("username", "password") && (
+                                                <span
+                                                    aria-live="polite"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: kcSanitize(messagesPerField.getFirstError("username", "password"))
+                                                    }}
+                                                />
+                                            )
+                                        }
                                     />
-                                    {messagesPerField.existsError("username", "password") && (
-                                        <span
-                                            id="input-error"
-                                            className={kcClsx("kcInputErrorMessageClass")}
-                                            aria-live="polite"
-                                            dangerouslySetInnerHTML={{
-                                                __html: kcSanitize(messagesPerField.getFirstError("username", "password"))
-                                            }}
-                                        />
-                                    )}
                                 </div>
                             )}
 

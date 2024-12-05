@@ -6,6 +6,7 @@ import DefaultPage from "keycloakify/login/DefaultPage";
 import Template from "./Template";
 import { tss } from "tss-react/mui";
 import { createTheme, ThemeProvider } from "@mui/material";
+import backgroundJpgUrl from "./assets/img/background.jpg";
 
 const UserProfileFormFields = lazy(() => import("./UserProfileFormFields"));
 
@@ -21,7 +22,7 @@ const theme = createTheme({
             default: "#000000",
             paper: "#111111"
         },
-        text: { primary: "#EDEDED", secondary: "#A1A1A1" }
+        text: { primary: "#000000", secondary: "#A1A1A1" }
     }
 });
 
@@ -89,7 +90,8 @@ const useStyles = tss.create(
                 }
             },
             kcBodyClass: {
-                backgroundColor: theme.palette.background.default
+                color: theme.palette.text.primary,
+                background: `url(${backgroundJpgUrl}) no-repeat center center fixed`
             }
         }) satisfies { [key in ClassKey]?: unknown }
 );

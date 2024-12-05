@@ -8,6 +8,7 @@ import { useInitialize } from "keycloakify/login/Template.useInitialize";
 import type { I18n } from "./i18n";
 import type { KcContext } from "./KcContext";
 import { useStyles } from "tss-react/mui";
+import { Typography } from "@mui/material";
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
     const { css } = useStyles();
@@ -98,7 +99,9 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                     )}
                     {(() => {
                         const node = !(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (
-                            <h1 id="kc-page-title">{headerNode}</h1>
+                            <Typography variant="h1" sx={{ pb: 3 }}>
+                                {headerNode}
+                            </Typography>
                         ) : (
                             <div id="kc-username" className={kcClsx("kcFormGroupClass")}>
                                 <label id="kc-attempted-username">{auth.attemptedUsername}</label>
