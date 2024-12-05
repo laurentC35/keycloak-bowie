@@ -31,9 +31,6 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
         event.preventDefault();
     };
 
-    // const VisibilityOff = () => "off";
-    // const Visibility = () => "on";
-
     return (
         <Template
             kcContext={kcContext}
@@ -133,7 +130,9 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
                             <div className={kcClsx("kcFormGroupClass")}>
                                 <FormControl variant="outlined" sx={{ width: "100%", minWidth: "80%", pb: 2 }}>
-                                    <InputLabel htmlFor="outlined-adornment-password">{msg("password")}</InputLabel>
+                                    <InputLabel htmlFor="outlined-adornment-password" error={messagesPerField.existsError("username", "password")}>
+                                        {msg("password")}
+                                    </InputLabel>
                                     <OutlinedInput
                                         id="outlined-adornment-password"
                                         type={showPassword ? "text" : "password"}
