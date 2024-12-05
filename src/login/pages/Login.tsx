@@ -5,7 +5,21 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { getKcClsx } from "keycloakify/login/lib/kcClsx";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
-import { Button, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from "@mui/material";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Button,
+    FormControl,
+    FormHelperText,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    OutlinedInput,
+    TextField,
+    Typography
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
@@ -30,8 +44,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
         event.preventDefault();
     };
 
-    const VisibilityOff = () => "off";
-    const Visibility = () => "on";
+    // const VisibilityOff = () => "off";
+    // const Visibility = () => "on";
 
     return (
         <Template
@@ -156,12 +170,14 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                         label={msg("password")}
                                     />
                                     <FormHelperText error={messagesPerField.existsError("username", "password")}>
-                                        <span
-                                            aria-live="polite"
-                                            dangerouslySetInnerHTML={{
-                                                __html: kcSanitize(messagesPerField.getFirstError("username", "password"))
-                                            }}
-                                        />
+                                        {messagesPerField.existsError("username", "password") && (
+                                            <span
+                                                aria-live="polite"
+                                                dangerouslySetInnerHTML={{
+                                                    __html: kcSanitize(messagesPerField.getFirstError("username", "password"))
+                                                }}
+                                            />
+                                        )}
                                     </FormHelperText>
                                 </FormControl>
                             </div>

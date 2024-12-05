@@ -179,7 +179,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                             <div
                                 className={css({
                                     display: "flex",
-                                    justifyContent: "center",
+                                    justifyContent: "right",
                                     alignItems: "center",
                                     marginTop: "3em"
                                 })}
