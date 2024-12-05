@@ -22,7 +22,7 @@ const theme = createTheme({
             default: "#000000",
             paper: "#111111"
         },
-        text: { primary: "#000000", secondary: "#A1A1A1" }
+        text: { primary: "#fff", secondary: "#A1A1A1" }
     }
 });
 
@@ -84,6 +84,17 @@ const KcPageContextualized = (props: { kcContext: KcContext }) => {
 const useStyles = tss.create(
     ({ theme }) =>
         ({
+            kcHeaderClass: {
+                color: "white",
+                "text-align": "center"
+            },
+            kcFormCardClass: {
+                backgroundColor: "#2d323e",
+                margin: "auto",
+                padding: 20,
+                width: "auto",
+                maxWidth: "500px"
+            },
             kcHtmlClass: {
                 ":root": {
                     colorScheme: "dark"
