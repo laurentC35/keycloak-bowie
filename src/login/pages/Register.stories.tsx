@@ -52,6 +52,7 @@ export const WithRestrictedToMITStudents: Story = {
     render: () => (
         <KcPageStory
             kcContext={{
+                locale: { currentLanguageTag: "fr" },
                 profile: {
                     attributesByName: {
                         email: {
@@ -239,10 +240,12 @@ export const WithFieldErrors: Story = {
                     }
                 },
                 messagesPerField: {
-                    existsError: (fieldName: string) => ["username", "email"].includes(fieldName),
+                    existsError: (fieldName: string) => ["username", "email", "password", "password-confirm"].includes(fieldName),
                     get: (fieldName: string) => {
                         if (fieldName === "username") return "Username is required.";
                         if (fieldName === "email") return "Invalid email format.";
+                        if (fieldName === "password") return "Invalid pasword policy.";
+                        if (fieldName === "password-confirm") return "Passowrds doesn't match.";
                     }
                 }
             }}
