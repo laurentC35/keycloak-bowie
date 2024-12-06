@@ -205,7 +205,7 @@ function InputFieldByType(props: InputFieldByTypeProps) {
 }
 
 function PasswordWrapper(props: InputFieldByTypeProps & { kcClsx: KcClsx; i18n: I18n; passwordInputId: string; children?: JSX.Element }) {
-    const { i18n, displayableErrors, attribute } = props;
+    const { i18n, displayableErrors, dispatchFormAction, attribute, valueOrValues } = props;
 
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(show => !show);
@@ -216,7 +216,7 @@ function PasswordWrapper(props: InputFieldByTypeProps & { kcClsx: KcClsx; i18n: 
         event.preventDefault();
     };
 
-    const { advancedMsg } = i18n;
+    const { advancedMsgStr, advancedMsg } = i18n;
 
     const displayableError = displayableErrors.filter(({ fieldIndex }) => fieldIndex === undefined);
 
@@ -234,6 +234,29 @@ function PasswordWrapper(props: InputFieldByTypeProps & { kcClsx: KcClsx; i18n: 
                     required={attribute.required}
                     disabled={attribute.readOnly}
                     readOnly={attribute.readOnly}
+                    value={valueOrValues}
+                    autoComplete={attribute.autocomplete}
+                    placeholder={
+                        attribute.annotations.inputTypePlaceholder === undefined
+                            ? undefined
+                            : advancedMsgStr(attribute.annotations.inputTypePlaceholder)
+                    }
+                    onChange={event =>
+                        dispatchFormAction({
+                            action: "update",
+                            name: attribute.name,
+                            valueOrValues: (() => {
+                                return event.target.value;
+                            })()
+                        })
+                    }
+                    onBlur={() =>
+                        dispatchFormAction({
+                            action: "focus lost",
+                            name: attribute.name,
+                            fieldIndex: undefined
+                        })
+                    }
                     endAdornment={
                         <InputAdornment position="end">
                             <IconButton
@@ -328,7 +351,7 @@ function InputTag(props: InputFieldByTypeProps & { fieldIndex: number | undefine
                     fieldIndex: fieldIndex
                 })
             }
-        ></TextField>
+        />
         // <>
         //     <input
         //         type={(() => {
@@ -698,7 +721,7 @@ function SelectTag(props: InputFieldByTypeProps) {
 
                 return options.map(option => (
                     <option key={option} value={option}>
-                        {inputLabel(i18n, attribute, option)}
+                        {inputLabel(i18n, attribute, option, false)}
                     </option>
                 ));
             })()}
@@ -774,17 +797,19 @@ function SelectTag(props: InputFieldByTypeProps) {
     // );
 }
 
-function inputLabel(i18n: I18n, attribute: Attribute, option: string) {
-    const { advancedMsg } = i18n;
+function inputLabel(i18n: I18n, attribute: Attribute, option: string, withJsx = true) {
+    const { advancedMsg, advancedMsgStr } = i18n;
+
+    const interpret = withJsx ? advancedMsg : advancedMsgStr;
 
     if (attribute.annotations.inputOptionLabels !== undefined) {
         const { inputOptionLabels } = attribute.annotations;
 
-        return advancedMsg(inputOptionLabels[option] ?? option);
+        return interpret(inputOptionLabels[option] ?? option);
     }
 
     if (attribute.annotations.inputOptionLabelsI18nPrefix !== undefined) {
-        return advancedMsg(`${attribute.annotations.inputOptionLabelsI18nPrefix}.${option}`);
+        return interpret(`${attribute.annotations.inputOptionLabelsI18nPrefix}.${option}`);
     }
 
     return option;
