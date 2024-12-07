@@ -1,5 +1,6 @@
 export const organizations = [
     "Aucune",
+    "Insee",
     "SSP/Srise - Agriculture et alimentation",
     "DESL - Collectivités locales",
     "DSECE - Commerce extérieur",
