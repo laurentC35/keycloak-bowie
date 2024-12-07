@@ -13,6 +13,7 @@ import type { KcContext } from "./KcContext";
 import type { I18n } from "./i18n";
 import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { organizations } from "./pages/organizations";
 
 export default function UserProfileFormFields(props: UserProfileFormFieldsProps<KcContext, I18n>) {
     const { kcContext, i18n, kcClsx, onIsFormSubmittableValueChange, doMakeUserConfirmPassword, BeforeField, AfterField } = props;
@@ -294,6 +295,10 @@ function InputTag(props: InputFieldByTypeProps & { fieldIndex: number | undefine
 
     const displayableError = displayableErrors.filter(({ fieldIndex: fE }) => fieldIndex === fE);
 
+    if (attribute.name === "timbre") {
+        return <SelectTimbre {...props} />;
+    }
+
     return (
         <TextField
             autoFocus={first}
@@ -451,62 +456,6 @@ function InputTag(props: InputFieldByTypeProps & { fieldIndex: number | undefine
         // </>
     );
 }
-
-// function AddRemoveButtonsMultiValuedAttribute(props: {
-//     attribute: Attribute;
-//     values: string[];
-//     fieldIndex: number;
-//     dispatchFormAction: React.Dispatch<Extract<FormAction, { action: "update" }>>;
-//     i18n: I18n;
-// }) {
-//     const { attribute, values, fieldIndex, dispatchFormAction, i18n } = props;
-
-//     const { msg } = i18n;
-
-//     const { hasAdd, hasRemove } = getButtonToDisplayForMultivaluedAttributeField({ attribute, values, fieldIndex });
-
-//     const idPostfix = `-${attribute.name}-${fieldIndex + 1}`;
-
-//     return (
-//         <>
-//             {hasRemove && (
-//                 <>
-//                     <button
-//                         id={`kc-remove${idPostfix}`}
-//                         type="button"
-//                         className="pf-c-button pf-m-inline pf-m-link"
-//                         onClick={() =>
-//                             dispatchFormAction({
-//                                 action: "update",
-//                                 name: attribute.name,
-//                                 valueOrValues: values.filter((_, i) => i !== fieldIndex)
-//                             })
-//                         }
-//                     >
-//                         {msg("remove")}
-//                     </button>
-//                     {hasAdd ? <>&nbsp;|&nbsp;</> : null}
-//                 </>
-//             )}
-//             {hasAdd && (
-//                 <button
-//                     id={`kc-add${idPostfix}`}
-//                     type="button"
-//                     className="pf-c-button pf-m-inline pf-m-link"
-//                     onClick={() =>
-//                         dispatchFormAction({
-//                             action: "update",
-//                             name: attribute.name,
-//                             valueOrValues: [...values, ""]
-//                         })
-//                     }
-//                 >
-//                     {msg("addValue")}
-//                 </button>
-//             )}
-//         </>
-//     );
-// }
 
 function InputTagSelects(props: InputFieldByTypeProps) {
     const { attribute, dispatchFormAction, kcClsx, i18n, valueOrValues } = props;
@@ -798,6 +747,60 @@ function SelectTag(props: InputFieldByTypeProps) {
     //         })()}
     //     </select>
     // );
+}
+
+function SelectTimbre(props: InputFieldByTypeProps) {
+    const { attribute, dispatchFormAction, displayableErrors, i18n, valueOrValues } = props;
+
+    const isMultiple = attribute.annotations.inputType === "multiselect";
+
+    const { advancedMsgStr } = i18n;
+
+    return (
+        <TextField
+            sx={{ width: "100%", minWidth: "80%", pb: 2 }}
+            error={displayableErrors.length > 0}
+            id={attribute.name}
+            name={attribute.name}
+            value={valueOrValues}
+            select
+            required={attribute.required}
+            disabled={attribute.readOnly}
+            helperText={displayableErrors.map(({ errorMessage }, i, arr) => (
+                <Fragment key={i}>
+                    {errorMessage}
+                    {arr.length - 1 !== i && <br />}
+                </Fragment>
+            ))}
+            label={advancedMsgStr(attribute.displayName ?? "")}
+            slotProps={{
+                select: { native: true, value: valueOrValues }
+            }}
+            onChange={event =>
+                dispatchFormAction({
+                    action: "update",
+                    name: attribute.name,
+                    valueOrValues: (() => {
+                        return event.target.value;
+                    })()
+                })
+            }
+            onBlur={() =>
+                dispatchFormAction({
+                    action: "focus lost",
+                    name: attribute.name,
+                    fieldIndex: undefined
+                })
+            }
+        >
+            {!isMultiple && <option value=""></option>}
+            {organizations.map(option => (
+                <option key={option} value={option}>
+                    {option}
+                </option>
+            ))}
+        </TextField>
+    );
 }
 
 function inputLabel(i18n: I18n, attribute: Attribute, option: string, withJsx = true) {

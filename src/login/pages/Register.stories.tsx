@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { createKcPageStory } from "../KcPageStory";
 import type { Attribute } from "keycloakify/login";
+// import { organizations } from "./organizations";
 
 const { KcPageStory } = createKcPageStory({ pageId: "register.ftl" });
 
@@ -99,12 +100,24 @@ export const WithFavoritePet: Story = {
                             },
                             required: false,
                             readOnly: false
+                        } satisfies Attribute,
+
+                        timbre: {
+                            name: "timbre",
+                            displayName: "${profile.attributes.timbre}",
+                            validators: {},
+                            annotations: {
+                                inputOptionLabelsI18nPrefix: ""
+                            },
+                            required: false,
+                            readOnly: false
                         } satisfies Attribute
                     }
                 },
                 "x-keycloakify": {
                     messages: {
                         "profile.attributes.favoritePet": "Favorite Pet",
+                        "profile.attributes.timbre": "Organisation",
                         "profile.attributes.favoritePet.options.cat": "Fluffy Cat",
                         "profile.attributes.favoritePet.options.dog": "Loyal Dog",
                         "profile.attributes.favoritePet.options.fish": "Peaceful Fish"
