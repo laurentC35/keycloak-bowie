@@ -36,7 +36,7 @@ export default function UserProfileFormFields(props: UserProfileFormFieldsProps<
 
     return (
         <>
-            {formFieldStates.map(({ attribute, displayableErrors, valueOrValues }) => {
+            {formFieldStates.map(({ attribute, displayableErrors, valueOrValues }, indexField) => {
                 return (
                     <Fragment key={attribute.name}>
                         <GroupLabel attribute={attribute} groupNameRef={groupNameRef} i18n={i18n} kcClsx={kcClsx} />
@@ -63,6 +63,7 @@ export default function UserProfileFormFields(props: UserProfileFormFieldsProps<
                                     </Typography>
                                 )}
                                 <InputFieldByType
+                                    first={indexField === 0}
                                     attribute={attribute}
                                     valueOrValues={valueOrValues}
                                     displayableErrors={displayableErrors}
@@ -162,6 +163,7 @@ function GroupLabel(props: {
 }
 
 type InputFieldByTypeProps = {
+    first?: boolean;
     attribute: Attribute;
     valueOrValues: string | string[];
     displayableErrors: FormFieldError[];
@@ -222,7 +224,7 @@ function PasswordWrapper(props: InputFieldByTypeProps & { kcClsx: KcClsx; i18n: 
 
     return (
         <div>
-            <FormControl variant="outlined" sx={{ width: "100%", minWidth: "80%", pb: 2 }}>
+            <FormControl variant="outlined" sx={{ width: "100%", minWidth: "80%", pb: 0.5 }}>
                 <InputLabel htmlFor={attribute.name} required={attribute.required}>
                     {advancedMsg(attribute.displayName ?? "")}
                 </InputLabel>
@@ -286,7 +288,7 @@ function PasswordWrapper(props: InputFieldByTypeProps & { kcClsx: KcClsx; i18n: 
 }
 
 function InputTag(props: InputFieldByTypeProps & { fieldIndex: number | undefined }) {
-    const { attribute, fieldIndex, dispatchFormAction, valueOrValues, i18n, displayableErrors } = props;
+    const { first, attribute, fieldIndex, dispatchFormAction, valueOrValues, i18n, displayableErrors } = props;
 
     const { advancedMsgStr } = i18n;
 
@@ -294,7 +296,8 @@ function InputTag(props: InputFieldByTypeProps & { fieldIndex: number | undefine
 
     return (
         <TextField
-            sx={{ width: "100%", minWidth: "80%", pb: 2 }}
+            autoFocus={first}
+            sx={{ width: "100%", minWidth: "80%", pb: 0.5 }}
             error={displayableError.length > 0}
             value={(() => {
                 if (fieldIndex !== undefined) {

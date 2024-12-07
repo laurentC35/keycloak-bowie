@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { kcSanitize } from "keycloakify/lib/kcSanitize";
-import { clsx } from "keycloakify/tools/clsx";
+// import { clsx } from "keycloakify/tools/clsx";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { getKcClsx } from "keycloakify/login/lib/kcClsx";
 import type { KcContext } from "../KcContext";
@@ -44,10 +44,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                 <div id="kc-registration-container">
                     <div id="kc-registration">
                         <Typography>
-                            {msg("noAccount")}{" "}
-                            <a tabIndex={8} href={url.registrationUrl}>
-                                {msg("doRegister")}
-                            </a>
+                            {msg("noAccount")} <a href={url.registrationUrl}>{msg("doRegister")}</a>
                         </Typography>
                     </div>
                 </div>
@@ -59,9 +56,18 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             <hr />
                             <h2>{msg("identity-provider-login-label")}</h2>
                             <ul className={kcClsx("kcFormSocialAccountListClass", social.providers.length > 3 && "kcFormSocialAccountListGridClass")}>
-                                {social.providers.map((...[p, , providers]) => (
+                                {social.providers.map((...[p /*, providers*/]) => (
                                     <li key={p.alias}>
-                                        <a
+                                        <Button
+                                            id={`social-${p.alias}`}
+                                            variant="contained"
+                                            sx={{ width: "100%", backgroundColor: "black", color: "white" }}
+                                            href={p.loginUrl}
+                                            startIcon={<i className={p.iconClasses} aria-hidden="true"></i>}
+                                        >
+                                            <span dangerouslySetInnerHTML={{ __html: kcSanitize(p.displayName) }}></span>
+                                        </Button>
+                                        {/* <a
                                             id={`social-${p.alias}`}
                                             className={kcClsx(
                                                 "kcFormSocialAccountListButtonClass",
@@ -75,7 +81,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                                 className={clsx(kcClsx("kcFormSocialAccountNameClass"), p.iconClasses && "kc-social-icon-text")}
                                                 dangerouslySetInnerHTML={{ __html: kcSanitize(p.displayName) }}
                                             ></span>
-                                        </a>
+                                        </a> */}
                                     </li>
                                 ))}
                             </ul>
@@ -107,7 +113,6 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                                   ? msg("usernameOrEmail")
                                                   : msg("email")
                                         }
-                                        tabIndex={2}
                                         variant="outlined"
                                         name="username"
                                         defaultValue={login.username ?? ""}
@@ -136,7 +141,6 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     <OutlinedInput
                                         id="outlined-adornment-password"
                                         type={showPassword ? "text" : "password"}
-                                        tabIndex={3}
                                         error={messagesPerField.existsError("username", "password")}
                                         name="password"
                                         autoComplete="current-password"
@@ -173,13 +177,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     {realm.rememberMe && !usernameHidden && (
                                         <div className="checkbox">
                                             <label>
-                                                <input
-                                                    tabIndex={5}
-                                                    id="rememberMe"
-                                                    name="rememberMe"
-                                                    type="checkbox"
-                                                    defaultChecked={!!login.rememberMe}
-                                                />{" "}
+                                                <input id="rememberMe" name="rememberMe" type="checkbox" defaultChecked={!!login.rememberMe} />{" "}
                                                 {msg("rememberMe")}
                                             </label>
                                         </div>
@@ -188,9 +186,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 <div className={kcClsx("kcFormOptionsWrapperClass")}>
                                     {realm.resetPasswordAllowed && (
                                         <span>
-                                            <a tabIndex={6} href={url.loginResetCredentialsUrl}>
-                                                {msg("doForgotPassword")}
-                                            </a>
+                                            <a href={url.loginResetCredentialsUrl}>{msg("doForgotPassword")}</a>
                                         </span>
                                     )}
                                 </div>
@@ -198,14 +194,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
                             <div id="kc-form-buttons" className={kcClsx("kcFormGroupClass")}>
                                 <input type="hidden" id="id-hidden-input" name="credentialId" value={auth.selectedCredential} />
-                                <Button
-                                    variant="contained"
-                                    sx={{ width: "100%" }}
-                                    tabIndex={7}
-                                    disabled={isLoginButtonDisabled}
-                                    name="login"
-                                    type="submit"
-                                >
+                                <Button variant="contained" sx={{ width: "100%" }} disabled={isLoginButtonDisabled} name="login" type="submit">
                                     {msgStr("doLogIn")}
                                 </Button>
                             </div>

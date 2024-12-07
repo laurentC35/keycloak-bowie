@@ -240,11 +240,11 @@ export const WithOneSocialProvider: Story = {
                     displayInfo: true,
                     providers: [
                         {
-                            loginUrl: "google",
-                            alias: "google",
-                            providerId: "google",
-                            displayName: "Google",
-                            iconClasses: "fa fa-google"
+                            loginUrl: "github",
+                            alias: "github",
+                            providerId: "github",
+                            displayName: "Github",
+                            iconClasses: "fa fa-github"
                         }
                     ]
                 }

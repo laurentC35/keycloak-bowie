@@ -7,7 +7,7 @@ import type { UserProfileFormFieldsProps } from "keycloakify/login/UserProfileFo
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 type RegisterProps = PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n> & {
     UserProfileFormFields: LazyOrNot<(props: UserProfileFormFieldsProps) => JSX.Element>;
@@ -65,14 +65,6 @@ export default function Register(props: RegisterProps) {
                     </div>
                 )}
                 <div className={kcClsx("kcFormGroupClass")}>
-                    <div id="kc-form-options" className={kcClsx("kcFormOptionsClass")}>
-                        <div className={kcClsx("kcFormOptionsWrapperClass")}>
-                            <span>
-                                <a href={url.loginUrl}>{msg("backToLogin")}</a>
-                            </span>
-                        </div>
-                    </div>
-
                     {recaptchaRequired && !recaptchaVisible && recaptchaAction !== undefined ? (
                         <div id="kc-form-buttons" className={kcClsx("kcFormButtonsClass")}>
                             <button
@@ -102,6 +94,14 @@ export default function Register(props: RegisterProps) {
                             </Button>
                         </div>
                     )}
+
+                    <div id="kc-form-options" className={kcClsx("kcFormOptionsClass")}>
+                        <div className={kcClsx("kcFormOptionsWrapperClass")} style={{ paddingTop: "2em" }}>
+                            <Typography>
+                                <a href={url.loginUrl}>{msg("backToLogin")}</a>
+                            </Typography>
+                        </div>
+                    </div>
                 </div>
             </form>
         </Template>
