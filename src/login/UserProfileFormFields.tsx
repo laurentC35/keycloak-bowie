@@ -13,7 +13,7 @@ import type { KcContext } from "./KcContext";
 import type { I18n } from "./i18n";
 import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { organizations } from "./pages/organizations";
+import { loadOrganizationOptions, OrganizationOption } from "./pages/organizations";
 
 export default function UserProfileFormFields(props: UserProfileFormFieldsProps<KcContext, I18n>) {
     const { kcContext, i18n, kcClsx, onIsFormSubmittableValueChange, doMakeUserConfirmPassword, BeforeField, AfterField } = props;
@@ -756,6 +756,15 @@ function SelectTimbre(props: InputFieldByTypeProps) {
 
     const { advancedMsgStr } = i18n;
 
+    const [organizations, setOrganizations] = useState([] as OrganizationOption[]);
+
+    useEffect(() => {
+        const loadData = async () => {
+            setOrganizations(await loadOrganizationOptions());
+        };
+        loadData();
+    }, []);
+
     return (
         <TextField
             sx={{ width: "100%", minWidth: "80%", pb: 2 }}
@@ -794,11 +803,17 @@ function SelectTimbre(props: InputFieldByTypeProps) {
             }
         >
             {!isMultiple && <option value=""></option>}
-            {organizations.map(option => (
-                <option key={option} value={option}>
-                    {option}
-                </option>
-            ))}
+            {organizations.map(({ name, options }) => {
+                return (
+                    <optgroup key={name} label={name}>
+                        {options.map(option => (
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </optgroup>
+                );
+            })}
         </TextField>
     );
 }

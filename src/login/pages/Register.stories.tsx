@@ -109,7 +109,7 @@ export const WithFavoritePet: Story = {
                             annotations: {
                                 inputOptionLabelsI18nPrefix: ""
                             },
-                            required: false,
+                            required: true,
                             readOnly: false
                         } satisfies Attribute
                     }

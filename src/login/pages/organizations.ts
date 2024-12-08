@@ -1,20 +1,17 @@
-export const organizations = [
-    "Aucune",
-    "Insee",
-    "SSP/Srise - Agriculture et alimentation",
-    "DESL - Collectivités locales",
-    "DSECE - Commerce extérieur",
-    "Deps - Culture",
-    "S2E - Défense",
-    "Sdes - Énergie, logement, transport, environnement",
-    "Depp - Éducation",
-    "Sies - Enseignement supérieur, recherche",
-    "PSP - Finances publiques",
-    "Sdessi - Fonction publique",
-    "DSED - Immigration",
-    "Medes - Jeunesse et sports",
-    "SSER - Justice",
-    "Drees - Santé et solidarités",
-    "SSMSI - Sécurité intérieure",
-    "Dares - Travail"
-];
+export const loadOrganizationOptions = async () => {
+    return await fetch(
+        "https://bowie-filiere.github.io/demo-stamps/organizations.json"
+    ).then(async r => {
+        if (r.ok) {
+            return (await r.json()) as OrganizationOption[];
+        } else
+            return [
+                { name: "Autre", options: ["Aucune", "Insee"] }
+            ] as OrganizationOption[];
+    });
+};
+
+export type OrganizationOption = {
+    name: string;
+    options: string[];
+};
