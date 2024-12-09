@@ -185,9 +185,16 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 </div>
                                 <div className={kcClsx("kcFormOptionsWrapperClass")}>
                                     {realm.resetPasswordAllowed && (
-                                        <span>
-                                            <a href={url.loginResetCredentialsUrl}>{msg("doForgotPassword")}</a>
-                                        </span>
+                                        <Typography>
+                                            <a
+                                                href={
+                                                    "mailto:service-numerique-atelier-conception-enquetes@insee.fr?subject=[Environnement de démonstration] - Mot de passe oublié"
+                                                }
+                                            >
+                                                {msg("doForgotPassword")}
+                                            </a>
+                                            {/* <a href={url.loginResetCredentialsUrl}>{msg("doForgotPassword")}</a> */}
+                                        </Typography>
                                     )}
                                 </div>
                             </div>
